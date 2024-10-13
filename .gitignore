@@ -1,0 +1,5 @@
+# Datasets are too large
+data/
+
+#Virtual Environment
+venv/
