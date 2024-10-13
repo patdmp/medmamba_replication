@@ -1,1 +1,1 @@
-﻿# medmamba_replication
+﻿# CS602 Project - MedMamba Replication
