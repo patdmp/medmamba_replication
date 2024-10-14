@@ -3,3 +3,4 @@ data/
 
 #Virtual Environment
 venv/
+.linuxenv/
