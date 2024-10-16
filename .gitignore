@@ -4,3 +4,5 @@ data/
 #Virtual Environment
 venv/
 .linuxenv/
+
+__pycache__
