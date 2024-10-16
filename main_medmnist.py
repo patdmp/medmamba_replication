@@ -19,8 +19,8 @@ def main():
     print("Using {} device.".format(device))
 
     # Load dataset
-    dataset_name = 'retinamnist'
-    num_classes = 5
+    dataset_name = 'breastmnist'
+    num_classes = 2
 
     # Check if the folder exists, if not, create it
     if not os.path.exists(f'{dataset_name}/'):
@@ -61,15 +61,15 @@ def main():
     # loss_function = nn.CrossEntropyLoss(weight=class_weights)
 
     loss_function = nn.CrossEntropyLoss()
-    # optimizer = Adam(net.parameters(), lr=0.001)
-    optimizer = SGD(net.parameters(), lr=0.001)
+    optimizer = Adam(net.parameters(), lr=0.001)
+    # optimizer = SGD(net.parameters(), lr=0.001)
 
     # Set up the learning rate scheduler
     milestones = [50, 75] #range(10,100,10)
     scheduler = MultiStepLR(optimizer, milestones=milestones, gamma=0.1)
 
     # Set training parameters
-    epochs = 50
+    epochs = 10
     best_acc = 0.0
     train_steps = len(train_loader)
     save_path = f'{dataset_name}/{model_name}Net.pth'

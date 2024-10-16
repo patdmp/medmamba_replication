@@ -738,11 +738,11 @@ class VSSM(nn.Module):
     def forward_backbone(self, x):
         x = self.patch_embed(x)
 
-        # Calculate FLOPs after patch embedding
-        B, _, H, W = x.shape
-        L = H * W  # Length = height * width
-        flops = flops_selective_scan_ref(B=B, L=L, D=self.embed_dim, N=16, with_D=True, with_Group=True)
-        print(f"Estimated FLOPs after patch embedding: {flops}")
+        # # Calculate FLOPs after patch embedding
+        # B, _, H, W = x.shape
+        # L = H * W  # Length = height * width
+        # flops = flops_selective_scan_ref(B=B, L=L, D=self.embed_dim, N=16, with_D=True, with_Group=True)
+        # print(f"Estimated FLOPs after patch embedding: {flops}")
 
         if self.ape:
             x = x + self.absolute_pos_embed
@@ -751,11 +751,11 @@ class VSSM(nn.Module):
         for layer in self.layers:
             x = layer(x)
 
-            # Optionally calculate FLOPs for each layer
-            B, _, H, W = x.shape
-            L = H * W
-            layer_flops = flops_selective_scan_ref(B=B, L=L, D=self.embed_dim, N=16, with_D=True, with_Group=True)
-            print(f"Estimated FLOPs after layer: {layer_flops}")
+            # # Optionally calculate FLOPs for each layer
+            # B, _, H, W = x.shape
+            # L = H * W
+            # layer_flops = flops_selective_scan_ref(B=B, L=L, D=self.embed_dim, N=16, with_D=True, with_Group=True)
+            # print(f"Estimated FLOPs after layer: {layer_flops}")
         return x
 
     def forward(self, x):

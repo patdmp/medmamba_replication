@@ -30,16 +30,18 @@ class ConfusionMatrix:
         print("The model accuracy is ", acc)
 
         table = PrettyTable()
-        table.field_names = ["", "Precision", "Recall", "Specificity"]
+        table.field_names = ["", "Precision", "Recall (Sensitivity)", "Specificity", "F1-Score"]
         for i in range(self.num_classes):
             TP = self.matrix[i, i]
             FP = np.sum(self.matrix[i, :]) - TP
             FN = np.sum(self.matrix[:, i]) - TP
             TN = np.sum(self.matrix) - TP - FP - FN
             Precision = round(TP / (TP + FP), 3) if TP + FP != 0 else 0.
-            Recall = round(TP / (TP + FN), 3) if TP + FN != 0 else 0.
+            Recall = round(TP / (TP + FN), 3) if TP + FN != 0 else 0.  # Recall is the same as Sensitivity
             Specificity = round(TN / (TN + FP), 3) if TN + FP != 0 else 0.
-            table.add_row([self.labels[i], Precision, Recall, Specificity])
+            F1 = round(2 * (Precision * Recall) / (Precision + Recall), 3) if (Precision + Recall) != 0 else 0.
+
+            table.add_row([self.labels[i], Precision, Recall, Specificity, F1])
         print(table)
 
     def plot(self, dataset_name='', save_path=None):
@@ -63,9 +65,9 @@ class ConfusionMatrix:
             for y in range(self.num_classes):
                 info = int(matrix[y, x])
                 plt.text(x, y, info,
-                        verticalalignment='center',
-                        horizontalalignment='center',
-                        color="white" if info > thresh else "black")
+                         verticalalignment='center',
+                         horizontalalignment='center',
+                         color="white" if info > thresh else "black")
         
         plt.tight_layout()
 
@@ -75,24 +77,25 @@ class ConfusionMatrix:
         plt.savefig(save_path)
         print(f"Confusion matrix saved as {save_path}")
 
-
-
 def main():
     # Set up device: use GPU if available
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print("Using {} device.".format(device))
 
     # Load dataset
-    dataset_name = 'retinamnist'
-    num_classes = 5
+    dataset_name = 'bloodmnist'
+    num_classes = 8
 
     batch_size = 128
     train_loader, val_loader, train_num, val_num = load_data(dataset_name, batch_size)
     print("Using {} images for training, {} images for validation.".format(train_num, val_num))
 
     # Initialize the model
+    medmamba_s = VSSM(depths=[2, 2, 8, 2],dims=[96,192,384,768],num_classes=num_classes)
+    medmamba_b = VSSM(depths=[2, 2, 12, 2],dims=[128,256,512,1024],num_classes=num_classes)
+    medmamba_t = VSSM(depths=[2, 2, 4, 2],dims=[96,192,384,768],num_classes=num_classes)
     model_name = 'medmamba_t'
-    net = medmamba_s
+    net = medmamba_t
     net.num_classes = num_classes
     net.to(device)
 
