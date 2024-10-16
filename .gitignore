@@ -1,10 +1,13 @@
 # Datasets are too large
 data/
 
-#Virtual Environment
+# Virtual Environment
 venv/
 .linuxenv/
 
 __pycache__
 
 main.py
+
+# Model Weights
+*.pth
