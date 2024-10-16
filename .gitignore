@@ -6,3 +6,5 @@ venv/
 .linuxenv/
 
 __pycache__
+
+main.py
